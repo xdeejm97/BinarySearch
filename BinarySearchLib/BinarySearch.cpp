@@ -19,17 +19,17 @@ std::vector<unsigned int>::iterator findBinary(std::vector<unsigned int>& v, uns
 		auto middle = from + std::distance(from, to) / 2;
 		if (key == *middle)
 		{
-			//TODO insert the missing statement
+			return middle;
 		}
 		else
 		{
 			if (key < *middle)
 			{
-				//TODO insert the missing statement
+				to = middle;
 			}
 			else
 			{
-				//TODO insert the missing statement
+				from = middle + 1;
 			}
 		}
 	}
