@@ -5,7 +5,7 @@ std::vector<unsigned int>::iterator findTrivial(std::vector<unsigned int> & v, u
 	for (auto i = v.begin(); i != v.end(); ++i)
 		if (*i == key)
 		{
-			//TODO insert the missing statement
+			return i;
 		}
 	return v.end();
 }
