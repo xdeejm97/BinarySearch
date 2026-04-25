@@ -17,20 +17,27 @@
 ---
 
 
-**Temat:** (zwięzła nazwa projektowanego systemu)
+**Temat:** Warsztat samochodowy
 
-**Autorzy:** (Imiona i nazwiska autorów)
+**Autorzy:** Mikołaj Stolarczyk i Damian Nieśmiałowski
 
 --- 
 
 # 1.  Zakres i krótki opis systemu
 
-(np. Cel projektu, słowny opis realizowanego systemu systemu)
-
+System obejmuje podstawowe funkcjonowanie warsztatu samochodowego, który zajmuje się diagnostyką oraz naprawą pojazdów. Jego celem jest sprawna obsługa klientów, identyfikacja usterek oraz realizacja usług serwisowych.
 
 # 2.	Wymagania i funkcje systemu
 
-(np. lista wymagań, np. historyjki użytkownika, np. przypadki użycia itp.)
+System powinien umożliwiać:
+
+- rejestrację klientów i pojazdów
+- przyjmowanie zleceń naprawy
+- prowadzenie diagnostyki
+- zarządzanie realizacją usług
+- śledzenie statusu napraw
+- wystawianie rachunków
+- przegląd historii serwisowej pojazdów
 
 # 3.	Projekt bazy danych
 
