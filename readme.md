@@ -12,10 +12,6 @@
   }
 </style>  -->
 
-
----
-
-
 **Temat:** Warsztat samochodowy
 
 **Autorzy:** Mikołaj Stolarczyk i Damian Nieśmiałowski
