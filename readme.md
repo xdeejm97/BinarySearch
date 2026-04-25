@@ -1,4 +1,3 @@
-[wzor_dok.md](https://github.com/user-attachments/files/27084016/wzor_dok.md)
 
 
 <!-- <style>
