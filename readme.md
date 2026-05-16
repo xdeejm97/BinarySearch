@@ -14,25 +14,41 @@
 
 **Temat:** Warsztat samochodowy
 
-**Autorzy:** Mikołaj Stolarczyk i Damian Nieśmiałowski aaa
+**Autorzy:** Mikołaj Stolarczyk i Damian Nieśmiałowski 
 
 --- 
 
 # 1.  Zakres i krótki opis systemu
 
-System obejmuje podstawowe funkcjonowanie warsztatu samochodowego, który zajmuje się diagnostyką oraz naprawą pojazdów. Jego celem jest sprawna obsługa klientów, identyfikacja usterek oraz realizacja usług serwisowych.
+Zakres i krótki opis systemu
+
+System obejmuje kompleksową obsługę warsztatu samochodowego zajmującego się **diagnostyką, naprawą oraz serwisowaniem pojazdów**. Jego głównym celem jest usprawnienie organizacji pracy warsztatu, zarządzania klientami i pojazdami oraz kontrolowania **przebiegu realizacji usług od momentu przyjęcia samochodu aż do jego wydania właścicielowi.**
+
+Proces działania systemu rozpoczyna się od rejestracji klienta oraz pojazdu w bazie danych. Następnie pracownik warsztatu tworzy zlecenie naprawy, w którym zapisywane są zgłoszone usterki, data przyjęcia pojazdu oraz przewidywany termin realizacji usługi. Kolejnym etapem jest przeprowadzenie diagnostyki pojazdu, podczas której mechanik identyfikuje problemy techniczne i określa zakres koniecznych napraw.
+
+Po zatwierdzeniu naprawy system umożliwia przypisanie zadań mechanikom, monitorowanie postępu prac oraz aktualizowanie statusu zlecenia (np. „przyjęty”, „w trakcie naprawy”, „oczekiwanie na części”, „gotowy do odbioru”). Po zakończeniu usługi generowany jest rachunek lub faktura zawierająca wykonane czynności oraz wykorzystane części zamienne.
+
+System przechowuje również historię serwisową pojazdów, dzięki czemu możliwe jest sprawdzenie wcześniejszych napraw, wymienionych części i dat wizyt klienta w warsztacie. Pozwala to na lepszą organizację pracy oraz szybszą obsługę klientów w przyszłości.
 
 # 2.	Wymagania i funkcje systemu
 
 System powinien umożliwiać:
 
-- rejestrację klientów i pojazdów
-- przyjmowanie zleceń naprawy
-- prowadzenie diagnostyki
-- zarządzanie realizacją usług
-- śledzenie statusu napraw
-- wystawianie rachunków
-- przegląd historii serwisowej pojazdów
+- rejestrację klientów i pojazdów,
+- przechowywanie danych kontaktowych klientów,
+- przyjmowanie pojazdów do warsztatu,
+- tworzenie i edycję zleceń naprawy,
+- prowadzenie diagnostyki pojazdów,
+- przypisywanie zadań mechanikom,
+- zarządzanie realizacją usług serwisowych,
+- śledzenie statusu napraw,
+- ewidencję części zamiennych wykorzystanych podczas napraw,
+- określanie kosztów usług i części,
+- wystawianie rachunków lub faktur,
+- informowanie o terminie odbioru pojazdu,
+- przegląd historii serwisowej pojazdów,
+- wyszukiwanie klientów, pojazdów i zleceń,
+- generowanie podstawowych raportów dotyczących wykonanych usług i napraw.
 
 # 3.	Projekt bazy danych
 
