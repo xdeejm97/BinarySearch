@@ -58,16 +58,171 @@ System powinien umożliwiać:
 
 ## Opis poszczególnych tabel
 
-(Dla każdej tabeli opis w formie tabelki)
+Nazwa tabeli: suppliers
+
+Opis: Tabela przechowująca dane dostawców części i materiałów do warsztatu.
+
+| Nazwa atrybutu | Typ          | Opis/Uwagi                           |
+| -------------- | ------------ | ------------------------------------ |
+| supplier_id    | INT          | Klucz główny, identyfikator dostawcy |
+| company_name   | VARCHAR(100) | Nazwa firmy dostawcy                 |
+| contact_person | VARCHAR(100) | Osoba kontaktowa                     |
+| phone          | VARCHAR(20)  | Numer telefonu                       |
+| email          | VARCHAR(100) | Adres e-mail                         |
+| address        | VARCHAR(255) | Adres dostawcy                       |
+| nip            | VARCHAR(15)  | Numer NIP dostawcy                   |
+| created_at     | DATETIME     | Data dodania rekordu                 |
 
 
-Nazwa tabeli: (nazwa tabeli)
-- Opis: (opis tabeli, komentarz)
+Nazwa tabeli: clients
 
-| Nazwa atrybutu | Typ  | Opis/Uwagi |
-|----------------|------|------------|
-| Atrybut 1 …    |      |            |
-| Atrybut 2 …    |      |            |
+Opis: Tabela przechowująca dane klientów warsztatu.
+
+| Nazwa atrybutu | Typ          | Opis/Uwagi                          |
+| -------------- | ------------ | ----------------------------------- |
+| client_id      | INT          | Klucz główny, identyfikator klienta |
+| first_name     | VARCHAR(50)  | Imię klienta                        |
+| last_name      | VARCHAR(50)  | Nazwisko klienta                    |
+| phone          | VARCHAR(20)  | Numer telefonu                      |
+| email          | VARCHAR(100) | Adres e-mail                        |
+| address        | VARCHAR(255) | Adres zamieszkania                  |
+| postal_code    | VARCHAR(10)  | Kod pocztowy                        |
+| city           | VARCHAR(50)  | Miasto                              |
+| created_at     | DATETIME     | Data dodania klienta                |
+
+
+Nazwa tabeli: employees
+
+Opis: Tabela przechowująca dane pracowników warsztatu.
+
+| Nazwa atrybutu | Typ           | Opis/Uwagi                             |
+| -------------- | ------------- | -------------------------------------- |
+| employee_id    | INT           | Klucz główny, identyfikator pracownika |
+| first_name     | VARCHAR(50)   | Imię pracownika                        |
+| last_name      | VARCHAR(50)   | Nazwisko pracownika                    |
+| position       | VARCHAR(50)   | Stanowisko                             |
+| phone          | VARCHAR(20)   | Numer telefonu                         |
+| email          | VARCHAR(100)  | Adres e-mail                           |
+| salary         | DECIMAL(10,2) | Wynagrodzenie                          |
+| hire_date      | DATE          | Data zatrudnienia                      |
+| status         | VARCHAR(30)   | Status pracownika                      |
+
+
+Nazwa tabeli: vehicles
+
+Opis: Tabela przechowująca dane pojazdów klientów.
+
+| Nazwa atrybutu      | Typ         | Opis/Uwagi                          |
+| ------------------- | ----------- | ----------------------------------- |
+| vehicle_id          | INT         | Klucz główny, identyfikator pojazdu |
+| client_id           | INT         | Klucz obcy do tabeli clients_zad    |
+| brand               | VARCHAR(50) | Marka pojazdu                       |
+| model               | VARCHAR(50) | Model pojazdu                       |
+| year                | INT         | Rok produkcji                       |
+| engine              | VARCHAR(50) | Typ silnika                         |
+| fuel_type           | VARCHAR(30) | Rodzaj paliwa                       |
+| vin                 | VARCHAR(50) | Numer VIN                           |
+| registration_number | VARCHAR(20) | Numer rejestracyjny                 |
+| mileage             | INT         | Aktualny przebieg                   |
+
+
+Nazwa tabeli: services
+
+Opis: Tabela przechowująca usługi oferowane przez warsztat.
+
+| Nazwa atrybutu | Typ           | Opis/Uwagi                         |
+| -------------- | ------------- | ---------------------------------- |
+| service_id     | INT           | Klucz główny, identyfikator usługi |
+| name           | VARCHAR(100)  | Nazwa usługi                       |
+| description    | VARCHAR(255)  | Opis usługi                        |
+| price          | DECIMAL(10,2) | Cena usługi                        |
+| estimated_time | INT           | Szacowany czas wykonania           |
+| is_active      | BIT           | Status aktywności usługi           |
+
+
+Nazwa tabeli: car_parts
+
+Opis: Tabela przechowująca części samochodowe znajdujące się w magazynie warsztatu.
+
+| Nazwa atrybutu    | Typ           | Opis/Uwagi                         |
+| ----------------- | ------------- | ---------------------------------- |
+| part_id           | INT           | Klucz główny, identyfikator części |
+| name              | VARCHAR(100)  | Nazwa części                       |
+| category          | VARCHAR(50)   | Kategoria części                   |
+| manufacturer      | VARCHAR(100)  | Producent części                   |
+| part_number       | VARCHAR(50)   | Numer katalogowy części            |
+| quantity_in_stock | INT           | Ilość na stanie                    |
+| purchase_price    | DECIMAL(10,2) | Cena zakupu                        |
+| selling_price     | DECIMAL(10,2) | Cena sprzedaży                     |
+| supplier_id       | INT           | Klucz obcy do tabeli suppliers_zad |
+| location          | VARCHAR(100)  | Lokalizacja w magazynie            |
+| created_at        | DATETIME      | Data dodania części                |
+
+
+Nazwa tabeli: orders
+
+Opis: Tabela przechowująca zamówienia składane do dostawców.
+
+| Nazwa atrybutu | Typ           | Opis/Uwagi                             |
+| -------------- | ------------- | -------------------------------------- |
+| order_id       | INT           | Klucz główny, identyfikator zamówienia |
+| supplier_id    | INT           | Klucz obcy do tabeli suppliers_zad     |
+| employee_id    | INT           | Klucz obcy do tabeli employees_zad     |
+| order_date     | DATE          | Data złożenia zamówienia               |
+| delivery_date  | DATE          | Data dostawy                           |
+| status         | VARCHAR(30)   | Status zamówienia                      |
+| total_amount   | DECIMAL(10,2) | Łączna wartość zamówienia              |
+| description    | VARCHAR(255)  | Opis zamówienia                        |
+
+
+Nazwa tabeli: work_orders
+
+Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
+
+| Nazwa atrybutu      | Typ           | Opis/Uwagi                           |
+| ------------------- | ------------- | ------------------------------------ |
+| work_order_id       | INT           | Klucz główny, identyfikator zlecenia |
+| client_id           | INT           | Klucz obcy do tabeli clients_zad     |
+| vehicle_id          | INT           | Klucz obcy do tabeli vehicles_zad    |
+| employee_id         | INT           | Klucz obcy do tabeli employees_zad   |
+| date_created        | DATETIME      | Data utworzenia zlecenia             |
+| date_completed      | DATETIME      | Data zakończenia zlecenia            |
+| status              | VARCHAR(30)   | Status realizacji                    |
+| problem_description | VARCHAR(255)  | Opis problemu                        |
+| repair_description  | VARCHAR(255)  | Opis wykonanej naprawy               |
+| total_cost          | DECIMAL(10,2) | Łączny koszt naprawy                 |
+| description         | VARCHAR(255)  | Dodatkowy opis                       |
+
+
+Nazwa tabeli: reservations
+
+Opis: Tabela przechowująca rezerwacje wizyt klientów.
+
+| Nazwa atrybutu   | Typ          | Opis/Uwagi                             |
+| ---------------- | ------------ | -------------------------------------- |
+| reservation_id   | INT          | Klucz główny, identyfikator rezerwacji |
+| client_id        | INT          | Klucz obcy do tabeli clients_zad       |
+| vehicle_id       | INT          | Klucz obcy do tabeli vehicles_zad      |
+| service_id       | INT          | Klucz obcy do tabeli services_zad      |
+| employee_id      | INT          | Klucz obcy do tabeli employees_zad     |
+| reservation_date | DATETIME     | Termin rezerwacji                      |
+| status           | VARCHAR(30)  | Status rezerwacji                      |
+| description      | VARCHAR(255) | Opis lub uwagi                         |
+
+
+Nazwa tabeli: payments
+
+Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
+
+| Nazwa atrybutu     | Typ           | Opis/Uwagi                            |
+| ------------------ | ------------- | ------------------------------------- |
+| payment_id         | INT           | Klucz główny, identyfikator płatności |
+| work_order_id      | INT           | Klucz obcy do tabeli work_orders_zad  |
+| payment_date       | DATETIME      | Data płatności                        |
+| amount             | DECIMAL(10,2) | Kwota płatności                       |
+| payment_method     | VARCHAR(50)   | Metoda płatności                      |
+| status             | VARCHAR(30)   | Status płatności                      |
+| transaction_number | VARCHAR(100)  | Numer transakcji                      |
 
 
 # 4.	Implementacja
