@@ -75,7 +75,7 @@ Opis: Tabela przechowująca dane dostawców części i materiałów do warsztatu
 
 
 
-## Nazwa tabeli: clients
+### Nazwa tabeli: clients
 
 Opis: Tabela przechowująca dane klientów warsztatu.
 
@@ -93,7 +93,7 @@ Opis: Tabela przechowująca dane klientów warsztatu.
 
 
 
-## Nazwa tabeli: employees
+### Nazwa tabeli: employees
 
 Opis: Tabela przechowująca dane pracowników warsztatu.
 
@@ -111,7 +111,7 @@ Opis: Tabela przechowująca dane pracowników warsztatu.
 
 
 
-## Nazwa tabeli: vehicles
+### Nazwa tabeli: vehicles
 
 Opis: Tabela przechowująca dane pojazdów klientów.
 
@@ -130,7 +130,7 @@ Opis: Tabela przechowująca dane pojazdów klientów.
 
 
 
-## Nazwa tabeli: services
+### Nazwa tabeli: services
 
 Opis: Tabela przechowująca usługi oferowane przez warsztat.
 
@@ -145,7 +145,7 @@ Opis: Tabela przechowująca usługi oferowane przez warsztat.
 
 
 
-## Nazwa tabeli: car_parts
+### Nazwa tabeli: car_parts
 
 Opis: Tabela przechowująca części samochodowe znajdujące się w magazynie warsztatu.
 
@@ -165,7 +165,7 @@ Opis: Tabela przechowująca części samochodowe znajdujące się w magazynie wa
 
 
 
-## Nazwa tabeli: orders
+### Nazwa tabeli: orders
 
 Opis: Tabela przechowująca zamówienia składane do dostawców.
 
@@ -182,7 +182,7 @@ Opis: Tabela przechowująca zamówienia składane do dostawców.
 
 
 
-## Nazwa tabeli: work_orders
+### Nazwa tabeli: work_orders
 
 Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
 
@@ -202,7 +202,7 @@ Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
 
 
 
-## Nazwa tabeli: reservations
+### Nazwa tabeli: reservations
 
 Opis: Tabela przechowująca rezerwacje wizyt klientów.
 
@@ -219,7 +219,7 @@ Opis: Tabela przechowująca rezerwacje wizyt klientów.
 
 
 
-## Nazwa tabeli: payments
+### Nazwa tabeli: payments
 
 Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
 
