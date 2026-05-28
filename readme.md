@@ -54,7 +54,7 @@ System powinien umożliwiać:
 
 ## Schemat bazy danych
 
-(diagram (rysunek) przedstawiający schemat bazy danych) 
+<img width="1684" height="1158" alt="image" src="https://github.com/user-attachments/assets/b30993c8-958d-4fce-b024-e3bf0e57293a" />
 
 ## Opis poszczególnych tabel
 
