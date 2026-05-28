@@ -74,6 +74,7 @@ Opis: Tabela przechowująca dane dostawców części i materiałów do warsztatu
 | created_at     | DATETIME     | Data dodania rekordu                 |
 
 
+
 Nazwa tabeli: clients
 
 Opis: Tabela przechowująca dane klientów warsztatu.
@@ -91,6 +92,7 @@ Opis: Tabela przechowująca dane klientów warsztatu.
 | created_at     | DATETIME     | Data dodania klienta                |
 
 
+
 Nazwa tabeli: employees
 
 Opis: Tabela przechowująca dane pracowników warsztatu.
@@ -106,6 +108,7 @@ Opis: Tabela przechowująca dane pracowników warsztatu.
 | salary         | DECIMAL(10,2) | Wynagrodzenie                          |
 | hire_date      | DATE          | Data zatrudnienia                      |
 | status         | VARCHAR(30)   | Status pracownika                      |
+
 
 
 Nazwa tabeli: vehicles
@@ -126,6 +129,7 @@ Opis: Tabela przechowująca dane pojazdów klientów.
 | mileage             | INT         | Aktualny przebieg                   |
 
 
+
 Nazwa tabeli: services
 
 Opis: Tabela przechowująca usługi oferowane przez warsztat.
@@ -138,6 +142,7 @@ Opis: Tabela przechowująca usługi oferowane przez warsztat.
 | price          | DECIMAL(10,2) | Cena usługi                        |
 | estimated_time | INT           | Szacowany czas wykonania           |
 | is_active      | BIT           | Status aktywności usługi           |
+
 
 
 Nazwa tabeli: car_parts
@@ -159,6 +164,7 @@ Opis: Tabela przechowująca części samochodowe znajdujące się w magazynie wa
 | created_at        | DATETIME      | Data dodania części                |
 
 
+
 Nazwa tabeli: orders
 
 Opis: Tabela przechowująca zamówienia składane do dostawców.
@@ -173,6 +179,7 @@ Opis: Tabela przechowująca zamówienia składane do dostawców.
 | status         | VARCHAR(30)   | Status zamówienia                      |
 | total_amount   | DECIMAL(10,2) | Łączna wartość zamówienia              |
 | description    | VARCHAR(255)  | Opis zamówienia                        |
+
 
 
 Nazwa tabeli: work_orders
@@ -194,6 +201,7 @@ Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
 | description         | VARCHAR(255)  | Dodatkowy opis                       |
 
 
+
 Nazwa tabeli: reservations
 
 Opis: Tabela przechowująca rezerwacje wizyt klientów.
@@ -208,6 +216,7 @@ Opis: Tabela przechowująca rezerwacje wizyt klientów.
 | reservation_date | DATETIME     | Termin rezerwacji                      |
 | status           | VARCHAR(30)  | Status rezerwacji                      |
 | description      | VARCHAR(255) | Opis lub uwagi                         |
+
 
 
 Nazwa tabeli: payments
