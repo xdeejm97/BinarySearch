@@ -58,7 +58,7 @@ System powinien umożliwiać:
 
 ## Opis poszczególnych tabel
 
-## Nazwa tabeli: suppliers
+### Nazwa tabeli: suppliers
 
 Opis: Tabela przechowująca dane dostawców części i materiałów do warsztatu.
 
