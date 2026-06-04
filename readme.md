@@ -54,7 +54,7 @@ System powinien umożliwiać:
 
 ## Schemat bazy danych
 
-<img width="1681" height="860" alt="873db2fb-c16d-4d2f-88cb-fe46325e36e2" src="https://github.com/user-attachments/assets/0c5d571a-ef37-457b-a9dc-44f5ecc458a1" />
+<img width="1657" height="856" alt="obraz" src="https://github.com/user-attachments/assets/1d3043d8-1d9b-495e-b242-8ab20bb74c3a" />
 
 ## Opis poszczególnych tabel
 
@@ -240,10 +240,202 @@ Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
 (dla każdej tabeli należy wkleić kod DDL polecenia tworzącego tabelę)
 
 ```sql
-create table tab1 (
-   a int,
-   b varchar(10)
-)
+-- SUPPLIERS
+
+CREATE TABLE [dbo].[suppliers_zad] (
+    supplier_id INT PRIMARY KEY IDENTITY(1,1),
+    company_name VARCHAR(100) NOT NULL,
+    contact_person VARCHAR(100),
+    phone VARCHAR(20),
+    email VARCHAR(100),
+    address VARCHAR(255),
+    nip VARCHAR(15) UNIQUE,
+    created_at DATETIME DEFAULT GETDATE()
+);
+
+-- CLIENTS
+CREATE TABLE [dbo].[clients_zad](
+    [client_id] [int] IDENTITY(1,1) NOT NULL,
+    [first_name] [varchar](50) NOT NULL,
+    [last_name] [varchar](50) NOT NULL,
+    [phone] [varchar](20) NULL,
+    [email] [varchar](100) NULL,
+    [address] [varchar](255) NULL,
+    [postal_code] [varchar](10) NULL,
+    [city] [varchar](50) NULL,
+    [created_at] [datetime] DEFAULT GETDATE(),
+PRIMARY KEY CLUSTERED ([client_id] ASC)
+) ON [PRIMARY]
+GO
+
+-- EMPLOYEES
+CREATE TABLE [dbo].[employees_zad](
+    [employee_id] [int] IDENTITY(1,1) NOT NULL,
+    [first_name] [varchar](50) NOT NULL,
+    [last_name] [varchar](50) NOT NULL,
+    [position] [varchar](50) NULL,
+    [phone] [varchar](20) NULL,
+    [email] [varchar](100) NULL,
+    [salary] [decimal](10,2) NULL,
+    [hire_date] [date] NULL,
+    [status] [varchar](30) NULL,
+PRIMARY KEY CLUSTERED ([employee_id] ASC)
+) ON [PRIMARY]
+GO
+
+--  CAR_MODELS
+CREATE TABLE [dbo].[car_models_zad](
+    [car_models_id] [int] IDENTITY(1,1) NOT NULL,
+    [brand] [varchar](50) NOT NULL,
+    [model] [varchar](50) NOT NULL,
+    [engine] [varchar](50) NOT NULL,
+    [fuel_type] [varchar](30) NOT NULL,
+PRIMARY KEY CLUSTERED ([car_models_id] ASC),
+CONSTRAINT UQ_car_models_zad UNIQUE ([brand], [model], [engine], [fuel_type])
+) ON [PRIMARY]
+GO
+
+-- CLIENT VEHICLES
+CREATE TABLE [dbo].[client_vehicles_zad](
+    [vehicle_id] [int] IDENTITY(1,1) NOT NULL,
+    [client_id] [int] NOT NULL,
+    [car_models_id] [int] NOT NULL,
+    [production_year] [int] NOT NULL,
+    [vin] [varchar](50) UNIQUE,
+    [registration_number] [varchar](20) UNIQUE,
+    [mileage] [int] NULL,
+PRIMARY KEY CLUSTERED ([vehicle_id] ASC),
+FOREIGN KEY ([client_id]) REFERENCES [dbo].[clients_zad]([client_id]),
+FOREIGN KEY ([car_models_id]) REFERENCES [dbo].[car_models_zad]([car_models_id])
+) ON [PRIMARY]
+GO
+
+-- CLIENT_WORK_ORDERS
+CREATE TABLE [dbo].[client_work_orders_zad](
+    [client_work_order_id] [int] IDENTITY(1,1) NOT NULL,
+    [client_id] [int] NOT NULL,
+    [vehicle_id] [int] NOT NULL,
+    [employee_id] [int] NULL,
+    [date_created] [datetime] DEFAULT GETDATE(),
+    [date_completed] [datetime] NULL,
+    [status] [varchar](30) NULL,
+    [problem_description] [varchar](255) NULL,
+    [repair_description] [varchar](255) NULL,
+    [total_cost] [decimal](10,2) NULL,
+    [description] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED ([client_work_order_id] ASC),
+FOREIGN KEY ([client_id]) REFERENCES [dbo].[clients_zad]([client_id]),
+FOREIGN KEY ([vehicle_id]) REFERENCES [dbo].[client_vehicles_zad]([vehicle_id]),
+FOREIGN KEY ([employee_id]) REFERENCES [dbo].[employees_zad]([employee_id])
+) ON [PRIMARY]
+GO
+
+-- SERVICES_DETAILS   
+CREATE TABLE [dbo].[services_details_zad](
+    [service_id] [int] IDENTITY(1,1) NOT NULL,
+    [name] [varchar](100) NOT NULL,
+    [description] [varchar](255) NULL,
+    [price] [decimal](10,2) NOT NULL,
+    [estimated_time] [int] NULL,
+PRIMARY KEY CLUSTERED ([service_id] ASC)
+) ON [PRIMARY]
+GO
+
+-- WORK_SERVICES
+CREATE TABLE [dbo].[work_services_zad](
+    [work_service_id] [int] IDENTITY(1,1) NOT NULL,
+    [client_work_order_id] [int] NOT NULL,
+    [service_id] [int] NOT NULL,
+    [quantity] [int] NOT NULL DEFAULT 1,
+    [description] [varchar](255) NULL,
+    [created_at] [datetime] DEFAULT GETDATE(),
+PRIMARY KEY CLUSTERED ([work_service_id] ASC),
+FOREIGN KEY ([client_work_order_id]) 
+    REFERENCES [dbo].[client_work_orders_zad]([client_work_order_id]),
+FOREIGN KEY ([service_id]) 
+    REFERENCES [dbo].[services_details_zad]([service_id])
+) ON [PRIMARY]
+GO
+
+-- CAR_PARTS
+CREATE TABLE [dbo].[car_parts_zad](
+    [part_id] [int] IDENTITY(1,1) NOT NULL,
+    [name] [varchar](100) NOT NULL,
+    [category] [varchar](50) NULL,
+    [manufacturer] [varchar](100) NULL,
+    [part_number] [varchar](50) UNIQUE,
+    [quantity_in_stock] [int] DEFAULT 0,
+    [purchase_price] [decimal](10,2) NULL,
+    [selling_price] [decimal](10,2) NULL,
+    [supplier_id] [int] NULL,
+    [location] [varchar](100) NULL,
+    [created_at] [datetime] DEFAULT GETDATE(),
+PRIMARY KEY CLUSTERED ([part_id] ASC),
+FOREIGN KEY ([supplier_id]) REFERENCES [dbo].[suppliers_zad]([supplier_id])
+) ON [PRIMARY]
+GO
+
+-- USED_PARTS
+CREATE TABLE [dbo].[used_parts_zad](
+    [used_part_id] [int] IDENTITY(1,1) NOT NULL,
+    [client_work_order_id] [int] NOT NULL,
+    [part_id] [int] NOT NULL,
+    [quantity_used] [int] NOT NULL DEFAULT 1,
+    [description] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED ([used_part_id] ASC),
+FOREIGN KEY ([client_work_order_id]) 
+    REFERENCES [dbo].[client_work_orders_zad]([client_work_order_id]),
+FOREIGN KEY ([part_id]) 
+    REFERENCES [dbo].[car_parts_zad]([part_id])
+) ON [PRIMARY]
+GO
+
+-- COMPANY_ORDERS
+CREATE TABLE [dbo].[company_orders_zad](
+    [order_id] [int] IDENTITY(1,1) NOT NULL,
+    [supplier_id] [int] NOT NULL,
+    [employee_id] [int] NOT NULL,
+    [order_date] [date] NOT NULL,
+    [delivery_date] [date] NULL,
+    [status] [varchar](30) NULL,
+    [total_amount] [decimal](10,2) NULL,
+    [description] [varchar](255) NULL,
+PRIMARY KEY CLUSTERED ([order_id] ASC),
+FOREIGN KEY ([supplier_id]) 
+    REFERENCES [dbo].[suppliers_zad]([supplier_id]),
+FOREIGN KEY ([employee_id]) 
+    REFERENCES [dbo].[employees_zad]([employee_id])
+) ON [PRIMARY]
+GO
+
+-- COMPANY_ORDER_ITEMS
+CREATE TABLE [dbo].[company_order_items_zad](
+    [order_item_id] [int] IDENTITY(1,1) NOT NULL,
+    [order_id] [int] NOT NULL,
+    [part_id] [int] NOT NULL,
+    [quantity] [int] NOT NULL DEFAULT 1,
+    [purchase_price] [decimal](10,2) NULL,
+PRIMARY KEY CLUSTERED ([order_item_id] ASC),
+FOREIGN KEY ([order_id])
+    REFERENCES [dbo].[company_orders_zad]([order_id]),
+FOREIGN KEY ([part_id])
+    REFERENCES [dbo].[car_parts_zad]([part_id])
+) ON [PRIMARY]
+GO
+
+-- PAYMENTS
+CREATE TABLE [dbo].[payments_zad](
+    [payment_id] [int] IDENTITY(1,1) NOT NULL,
+    [client_work_order_id] [int] NOT NULL,
+    [payment_date] [datetime] DEFAULT GETDATE(),
+    [amount] [decimal](10,2) NOT NULL,
+    [payment_method] [varchar](50) NULL,
+    [status] [varchar](30) NULL,
+    [transaction_number] [varchar](100) NULL,
+PRIMARY KEY CLUSTERED ([payment_id] ASC),
+FOREIGN KEY ([client_work_order_id]) REFERENCES [dbo].[client_work_orders_zad]([client_work_order_id])
+) ON [PRIMARY]
+GO
 ```
 
 ## Widoki
