@@ -237,8 +237,6 @@ Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
 
 ## Kod poleceń DDL
 
-(dla każdej tabeli należy wkleić kod DDL polecenia tworzącego tabelę)
-
 ```sql
 -- SUPPLIERS
 
