@@ -239,7 +239,6 @@ Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
 
 ```sql
 -- SUPPLIERS
-
 CREATE TABLE [dbo].[suppliers_zad] (
     supplier_id INT PRIMARY KEY IDENTITY(1,1),
     company_name VARCHAR(100) NOT NULL,
