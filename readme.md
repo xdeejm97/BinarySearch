@@ -60,7 +60,7 @@ System powinien umożliwiać:
 
 ### Nazwa tabeli: suppliers
 
-Opis: Tabela przechowująca dane dostawców części i materiałów do warsztatu.
+Opis: Tabela przechowująca dane dostawców części samochodowych i materiałów do warsztatu.
 
 | Nazwa atrybutu | Typ          | Opis/Uwagi                           |
 | -------------- | ------------ | ------------------------------------ |
@@ -111,26 +111,46 @@ Opis: Tabela przechowująca dane pracowników warsztatu.
 
 
 
-### Nazwa tabeli: vehicles
+### Nazwa tabeli: client_vehicles
 
 Opis: Tabela przechowująca dane pojazdów klientów.
 
 | Nazwa atrybutu      | Typ         | Opis/Uwagi                          |
 | ------------------- | ----------- | ----------------------------------- |
 | vehicle_id          | INT         | Klucz główny, identyfikator pojazdu |
-| client_id           | INT         | Klucz obcy do tabeli clients_zad    |
-| brand               | VARCHAR(50) | Marka pojazdu                       |
-| model               | VARCHAR(50) | Model pojazdu                       |
-| year                | INT         | Rok produkcji                       |
-| engine              | VARCHAR(50) | Typ silnika                         |
-| fuel_type           | VARCHAR(30) | Rodzaj paliwa                       |
+| client_id           | INT         | Klucz obcy do tabeli clients        |
+| car_models_id       | INT         | Klucz obcy do tabeli car_models     |
+| production_year     | INT         | Rok produkcji                       |
 | vin                 | VARCHAR(50) | Numer VIN                           |
 | registration_number | VARCHAR(20) | Numer rejestracyjny                 |
 | mileage             | INT         | Aktualny przebieg                   |
 
+### Nazwa tabeli: car_models
 
+Opis: Tabela zawiera dane modeli samochodów.
 
-### Nazwa tabeli: services
+| Nazwa atrybutu      | Typ         | Opis/Uwagi                          |
+| ------------------- | ----------- | ----------------------------------- |
+| car_models_id       | INT         | Klucz główny, identyfikator Modelu  |
+| brand               | VARCHAR(50) | Marka pojazdu                       |
+| model               | VARCHAR(50) | Model pojazdu                       |
+| engine              | VARCHAR(50) | Typ silnika                         |
+| fuel_type           | VARCHAR(30) | Rodzaj paliwa                       |
+
+### Nazwa tabeli: work_services
+
+Opis: Tabela łączy zlecenia napraw z konkretnymi usługami wykonanymi w ramach danego zlecenia.
+
+| Nazwa atrybutu       | Typ           | Opis/Uwagi                             |
+| -------------------- | ------------- | -------------------------------------- |
+| work_service_id      | INT           | Klucz główny, identyfikator usługi     |
+| client_work_order_id | INT           | Klucz obcy do tabeli client_work_order |
+| service_id           | INT           | Klucz obcy do tabeli services_details  |
+| quantity             | INT           | Ilość wykonanej usługi                 |
+| description          | VARCHAR(255)  | Opis usługi                            |
+| created_at           | DATETIME      | Czas wykonania usługi                  |
+
+### Nazwa tabeli: services_details
 
 Opis: Tabela przechowująca usługi oferowane przez warsztat.
 
@@ -141,8 +161,7 @@ Opis: Tabela przechowująca usługi oferowane przez warsztat.
 | description    | VARCHAR(255)  | Opis usługi                        |
 | price          | DECIMAL(10,2) | Cena usługi                        |
 | estimated_time | INT           | Szacowany czas wykonania           |
-| is_active      | BIT           | Status aktywności usługi           |
-
+ 
 
 
 ### Nazwa tabeli: car_parts
@@ -164,10 +183,21 @@ Opis: Tabela przechowująca części samochodowe znajdujące się w magazynie wa
 | created_at        | DATETIME      | Data dodania części                |
 
 
+### Nazwa tabeli: used_parts
 
-### Nazwa tabeli: orders
+Opis: Tabela zapisuje części użyte podczas realizacji konkretnego zlecenia naprawy.
 
-Opis: Tabela przechowująca zamówienia składane do dostawców.
+| Nazwa atrybutu       | Typ           | Opis/Uwagi                                  |
+| -------------------- | ------------- | ------------------------------------------- |
+| used_part_id         | INT           | Klucz główny, identyfikator użytej części   |
+| client_work_order_id | INT           | Klucz obcy do tabeli client_work_orders_zad |
+| part_id              | INT           | Klucz obcyd do tabeli car_parts             |
+| quantity_used        | INT           | Ilość użytych części                        |
+| description          | VARCHAR(255)  | Krótki opis użytej części                   |
+ 
+### Nazwa tabeli: company_orders
+
+Opis: Tabela przechowująca zamówienia składane u dostawców części.
 
 | Nazwa atrybutu | Typ           | Opis/Uwagi                             |
 | -------------- | ------------- | -------------------------------------- |
@@ -182,13 +212,13 @@ Opis: Tabela przechowująca zamówienia składane do dostawców.
 
 
 
-### Nazwa tabeli: work_orders
+### Nazwa tabeli: company_order_items
 
-Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
+Opis: Tabela zawiera pozycje części znajdujących się w zamówieniach do dostawców.
 
 | Nazwa atrybutu      | Typ           | Opis/Uwagi                           |
 | ------------------- | ------------- | ------------------------------------ |
-| work_order_id       | INT           | Klucz główny, identyfikator zlecenia |
+| order_item_id       | INT           | Klucz główny, identyfikator zlecenia |
 | client_id           | INT           | Klucz obcy do tabeli clients_zad     |
 | vehicle_id          | INT           | Klucz obcy do tabeli vehicles_zad    |
 | employee_id         | INT           | Klucz obcy do tabeli employees_zad   |
@@ -198,40 +228,21 @@ Opis: Tabela przechowująca zlecenia napraw wykonywanych dla klientów.
 | problem_description | VARCHAR(255)  | Opis problemu                        |
 | repair_description  | VARCHAR(255)  | Opis wykonanej naprawy               |
 | total_cost          | DECIMAL(10,2) | Łączny koszt naprawy                 |
-| description         | VARCHAR(255)  | Dodatkowy opis                       |
-
-
-
-### Nazwa tabeli: reservations
-
-Opis: Tabela przechowująca rezerwacje wizyt klientów.
-
-| Nazwa atrybutu   | Typ          | Opis/Uwagi                             |
-| ---------------- | ------------ | -------------------------------------- |
-| reservation_id   | INT          | Klucz główny, identyfikator rezerwacji |
-| client_id        | INT          | Klucz obcy do tabeli clients_zad       |
-| vehicle_id       | INT          | Klucz obcy do tabeli vehicles_zad      |
-| service_id       | INT          | Klucz obcy do tabeli services_zad      |
-| employee_id      | INT          | Klucz obcy do tabeli employees_zad     |
-| reservation_date | DATETIME     | Termin rezerwacji                      |
-| status           | VARCHAR(30)  | Status rezerwacji                      |
-| description      | VARCHAR(255) | Opis lub uwagi                         |
-
 
 
 ### Nazwa tabeli: payments
 
 Opis: Tabela przechowująca informacje o płatnościach za wykonane usługi.
 
-| Nazwa atrybutu     | Typ           | Opis/Uwagi                            |
-| ------------------ | ------------- | ------------------------------------- |
-| payment_id         | INT           | Klucz główny, identyfikator płatności |
-| work_order_id      | INT           | Klucz obcy do tabeli work_orders_zad  |
-| payment_date       | DATETIME      | Data płatności                        |
-| amount             | DECIMAL(10,2) | Kwota płatności                       |
-| payment_method     | VARCHAR(50)   | Metoda płatności                      |
-| status             | VARCHAR(30)   | Status płatności                      |
-| transaction_number | VARCHAR(100)  | Numer transakcji                      |
+| Nazwa atrybutu       | Typ           | Opis/Uwagi                              |
+| -------------------- | ------------- | --------------------------------------- |
+| payment_id           | INT           | Klucz główny, identyfikator płatności   |
+| client_work_order_id | INT           | Klucz obcy do tabeli client_work_orders |
+| payment_date         | DATETIME      | Data płatności                          |
+| amount               | DECIMAL(10,2) | Kwota płatności                         |
+| payment_method       | VARCHAR(50)   | Metoda płatności                        |
+| status               | VARCHAR(30)   | Status płatności                        |
+| transaction_number   | VARCHAR(100)  | Numer transakcji                        |
 
 # 4.	Implementacja
 
@@ -319,7 +330,6 @@ CREATE TABLE [dbo].[client_work_orders_zad](
     [problem_description] [varchar](255) NULL,
     [repair_description] [varchar](255) NULL,
     [total_cost] [decimal](10,2) NULL,
-    [description] [varchar](255) NULL,
 PRIMARY KEY CLUSTERED ([client_work_order_id] ASC),
 FOREIGN KEY ([client_id]) REFERENCES [dbo].[clients_zad]([client_id]),
 FOREIGN KEY ([vehicle_id]) REFERENCES [dbo].[client_vehicles_zad]([vehicle_id]),
@@ -436,19 +446,250 @@ GO
 ```
 
 ## Widoki
+1. Widoki
+  
+---- Widok 1 - Historia zleceń klientów ----
+ 
+Widok pokazuje historię klienta, pojazd, mechanika i status zlecenia. Widok nadaje się do podstawowego raportu z napraw wykonanych lub realizowanych dla klientów.
+    
+CREATE VIEW vw_client_work_orders AS
+SELECT
+    cwo.client_work_order_id,
+    c.first_name + ' ' + c.last_name AS client_name,
+    cm.brand,
+    cm.model,
+    cv.registration_number,
+    e.first_name + ' ' + e.last_name AS employee_name,
+    cwo.date_created,
+    cwo.date_completed,
+    cwo.status,
+    cwo.total_cost
+FROM client_work_orders_zad cwo
+JOIN clients_zad c
+    ON cwo.client_id = c.client_id
+JOIN client_vehicles_zad cv
+    ON cwo.vehicle_id = cv.vehicle_id
+JOIN car_models_zad cm
+    ON cv.car_models_id = cm.car_models_id
+LEFT JOIN employees_zad e
+    ON cwo.employee_id = e.employee_id;
+GO
+ 
+ 
+---- Widok 2 - Stan magazynowy części ----
 
-(dla każdego widoku należy wkleić kod polecenia definiującego widok wraz z komentarzem)
+Widok przedstawia podstawowy stan magazynowy części. Jest to prostsza wersja widoku magazynowego, przydatna do szybkiego sprawdzenia dostępności części.
+ 
+CREATE VIEW vw_parts_stock AS
+SELECT
+    cp.part_id,
+    cp.name,
+    cp.category,
+    cp.manufacturer,
+    cp.quantity_in_stock,
+    cp.purchase_price,
+    cp.selling_price,
+    s.company_name AS supplier
+FROM car_parts_zad cp
+LEFT JOIN suppliers_zad s
+    ON cp.supplier_id = s.supplier_id;
+GO
 
+---- Widok 3 - Aktywne zlecenia ----
+
+Widok pokazuje tylko aktualnie aktywne zlecenia, czyli takie, które nie są zakończone, rozliczone ani anulowane. Dzięki temu można szybko sprawdzić, które samochody nadal znajdują się w obsłudze warsztatu. Widok przydaje się do bieżącej organizacji pracy.
+
+CREATE OR ALTER VIEW dbo.vw_active_work_orders_zad AS
+SELECT
+    *
+FROM dbo.vw_work_order_summary_zad
+WHERE ISNULL(status, '') NOT IN ('Zakończone', 'Rozliczone', 'Anulowane');
+GO
+
+---- Widok 4 - aktualne zamówienia części ----
+
+Widok przedstawia aktualne zamówienia części u dostawców. Widok pomaga śledzić, które zamówienia nie zostały jeszcze dostarczone.
+
+CREATE OR ALTER VIEW dbo.vw_pending_company_orders_zad AS
+SELECT
+    co.order_id, co.order_date, co.expected_delivery_date, DATEDIFF(DAY, CAST(GETDATE() AS DATE), co.expected_delivery_date) AS days_to_delivery, co.status, s.supplier_id, s.company_name AS supplier_name,
+    s.contact_person, s.phone AS supplier_phone, s.email AS supplier_email, e.employee_id, e.first_name + ' ' + e.last_name AS ordered_by,
+    COUNT(coi.order_item_id) AS items_count, SUM(coi.quantity) AS total_parts_quantity, SUM(CAST(coi.quantity AS DECIMAL(10,2)) * ISNULL(coi.purchase_price, 0)) AS calculated_total_amount,
+    co.total_amount, co.description
+FROM dbo.company_orders_zad co
+JOIN dbo.suppliers_zad s ON co.supplier_id = s.supplier_id
+JOIN dbo.employees_zad e ON co.employee_id = e.employee_id
+LEFT JOIN dbo.company_order_items_zad coi ON co.order_id = coi.order_id
+WHERE ISNULL(co.status, '') NOT IN ('Dostarczone', 'Anulowane')
+GROUP BY
+    co.order_id, co.order_date, co.expected_delivery_date, co.status, s.supplier_id, s.company_name, s.contact_person, s.phone, s.email, e.employee_id, e.first_name, e.last_name, co.total_amount, co.description;
+GO
 
 ## Procedury/funkcje
 
-(dla każdej procedury/funkcji należy wkleić kod polecenia definiującego procedurę wraz z komentarzem)
+---- Funkcja 1 - Liczba zleceń klienta ----
+Funkcja zwraca liczbę zleceń przypisanych do danego klienta. Na podstawie identyfikatora klienta sprawdza, ile razy korzystał on z usług warsztatu. Może być używana do prostych statystyk, na przykład do sprawdzenia aktywności klienta lub historii jego wizyt.
+
+CREATE FUNCTION fn_ClientWorkOrdersCount
+(
+    @client_id INT
+)
+RETURNS INT
+AS
+BEGIN
+    DECLARE @result INT;
+    SELECT @result = COUNT(*)
+    FROM client_work_orders_zad
+    WHERE client_id = @client_id;
+    RETURN @result;
+ 
+END
+GO
+ 
+Przykład:
+SELECT dbo.fn_ClientWorkOrdersCount(1);
+
+---- Funkcja 2 - całkowity koszt zlecenia ----
+
+Funkcja oblicza całkowity koszt zlecenia naprawy. Sumuje koszt usług oraz koszt użytych części. Jest przydatna do automatycznego aktualizowania pola total_cost w zleceniu oraz do przygotowania rozliczenia dla klienta.
+
+CREATE OR ALTER FUNCTION dbo.fn_work_order_total_cost_zad
+(
+    @client_work_order_id INT
+)
+RETURNS DECIMAL(10,2)
+AS
+BEGIN
+    DECLARE @result DECIMAL(10,2);
+
+    SET @result =
+        ISNULL(dbo.fn_work_order_services_cost_zad(@client_work_order_id), 0)
+        + ISNULL(dbo.fn_work_order_parts_cost_zad(@client_work_order_id), 0);
+
+    RETURN ISNULL(@result, 0);
+END;
+GO
+
+---- Procedura 1 - przyjęcie dostawy i zwiększenie magazynu ----
+
+Procedura służy do przyjęcia dostawy części od dostawcy. Po jej wykonaniu zwiększany jest stan magazynowy części na podstawie pozycji zamówienia, a samo zamówienie otrzymuje status Dostarczone. Procedura zapisuje także datę dostawy i przelicza wartość zamówienia.
+
+CREATE OR ALTER PROCEDURE dbo.sp_receive_company_order_zad
+    @order_id INT,
+    @delivery_date DATE = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SET XACT_ABORT ON;
+
+    BEGIN TRANSACTION;
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.company_orders_zad
+        WHERE order_id = @order_id
+          AND ISNULL(status, '') <> 'Dostarczone'
+    )
+    BEGIN
+        ROLLBACK TRANSACTION;
+        THROW 50017, 'Zamówienie nie istnieje albo zostało już przyjęte.', 1;
+    END;
+
+    IF NOT EXISTS (
+        SELECT 1
+        FROM dbo.company_order_items_zad
+        WHERE order_id = @order_id
+    )
+    BEGIN
+        ROLLBACK TRANSACTION;
+        THROW 50018, 'Nie można przyjąć zamówienia bez pozycji.', 1;
+    END;
+
+    ;WITH items AS (
+        SELECT
+            part_id,
+            SUM(quantity) AS quantity_to_add
+        FROM dbo.company_order_items_zad
+        WHERE order_id = @order_id
+        GROUP BY part_id
+    )
+    UPDATE cp
+    SET quantity_in_stock = ISNULL(cp.quantity_in_stock, 0) + items.quantity_to_add
+    FROM dbo.car_parts_zad cp
+    JOIN items
+        ON cp.part_id = items.part_id;
+
+    UPDATE dbo.company_orders_zad
+    SET
+        status = 'Dostarczone',
+        delivery_date = ISNULL(@delivery_date, CAST(GETDATE() AS DATE)),
+        total_amount = dbo.fn_company_order_total_zad(@order_id)
+    WHERE order_id = @order_id;
+
+    COMMIT TRANSACTION;
+
+    SELECT *
+    FROM dbo.company_orders_zad
+    WHERE order_id = @order_id;
+END;
+GO
 
 ## Triggery
 
-(dla każdego triggera należy wkleić kod polecenia definiującego trigger wraz z komentarzem)
 
+---- Trigger 1 - Aktualizacja stanu magazynowego po użyciu części ----
+ 
+Trigger uruchamia się po dodaniu użytej części do tabeli used_parts_zad. Jego zadaniem jest automatyczne zmniejszenie stanu magazynowego danej części o ilość wykorzystaną w naprawie. Dzięki temu magazyn jest aktualizowany bez ręcznego poprawiania liczby części.
 
+CREATE TRIGGER trg_UpdateStockAfterPartUsage
+ON used_parts_zad
+AFTER INSERT
+AS
+BEGIN
+    UPDATE cp
+    SET cp.quantity_in_stock =
+        cp.quantity_in_stock - i.quantity_used
+    FROM car_parts_zad cp
+    INNER JOIN inserted i
+        ON cp.part_id = i.part_id;
+ 
+END
+GO
+ 
+---- Trigger 2 - Kontrola stanu magazynowego ----
+ 
+Trigger sprawdza, czy przed dodaniem użytej części do zlecenia dostępna jest wystarczająca ilość tej części w magazynie. Jeżeli mechanik próbuje zużyć więcej części, niż znajduje się na stanie, operacja zostaje zablokowana i pojawia się komunikat o braku części. Trigger chroni bazę przed zejściem stanu magazynowego poniżej zera.
 
-
-
+CREATE TRIGGER trg_CheckStock
+ON used_parts_zad
+INSTEAD OF INSERT
+AS
+BEGIN
+    IF EXISTS
+    (
+        SELECT 1
+        FROM inserted i
+        JOIN car_parts_zad cp
+            ON i.part_id = cp.part_id
+        WHERE i.quantity_used > cp.quantity_in_stock
+    )
+    BEGIN
+        RAISERROR('Brak wystarczajacej ilosci czesci na magazynie.',16,1);
+        RETURN;
+    END
+    INSERT INTO used_parts_zad
+    (
+        client_work_order_id,
+        part_id,
+        quantity_used,
+        description
+    )
+    SELECT
+        client_work_order_id,
+        part_id,
+        quantity_used,
+        description
+    FROM inserted;
+ 
+END
+GO
