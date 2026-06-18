@@ -500,7 +500,7 @@ Widok przedstawia aktualne zamówienia części u dostawców. Widok pomaga śled
 
 CREATE OR ALTER VIEW dbo.vw_pending_company_orders_zad AS
 SELECT
-    co.order_id, co.order_date, co.expected_delivery_date, DATEDIFF(DAY, CAST(GETDATE() AS DATE), co.expected_delivery_date) AS days_to_delivery, co.status, s.supplier_id, s.company_name AS supplier_name,
+    co.order_id, co.order_date, co.delivery_date, DATEDIFF(DAY, CAST(GETDATE() AS DATE), co.delivery_date) AS days_to_delivery, co.status, s.supplier_id, s.company_name AS supplier_name,
     s.contact_person, s.phone AS supplier_phone, s.email AS supplier_email, e.employee_id, e.first_name + ' ' + e.last_name AS ordered_by,
     COUNT(coi.order_item_id) AS items_count, SUM(coi.quantity) AS total_parts_quantity, SUM(CAST(coi.quantity AS DECIMAL(10,2)) * ISNULL(coi.purchase_price, 0)) AS calculated_total_amount,
     co.total_amount, co.description
@@ -510,7 +510,7 @@ JOIN dbo.employees_zad e ON co.employee_id = e.employee_id
 LEFT JOIN dbo.company_order_items_zad coi ON co.order_id = coi.order_id
 WHERE ISNULL(co.status, '') NOT IN ('Dostarczone', 'Anulowane')
 GROUP BY
-    co.order_id, co.order_date, co.expected_delivery_date, co.status, s.supplier_id, s.company_name, s.contact_person, s.phone, s.email, e.employee_id, e.first_name, e.last_name, co.total_amount, co.description;
+    co.order_id, co.order_date, co.delivery_date, co.status, s.supplier_id, s.company_name, s.contact_person, s.phone, s.email, e.employee_id, e.first_name, e.last_name, co.total_amount, co.description;
 
 
 ## Procedury/funkcje
