@@ -274,7 +274,6 @@ CREATE TABLE [dbo].[clients_zad](
     [created_at] [datetime] DEFAULT GETDATE(),
 PRIMARY KEY CLUSTERED ([client_id] ASC)
 ) ON [PRIMARY]
-GO
 
 -- EMPLOYEES
 CREATE TABLE [dbo].[employees_zad](
@@ -289,7 +288,6 @@ CREATE TABLE [dbo].[employees_zad](
     [status] [varchar](30) NULL,
 PRIMARY KEY CLUSTERED ([employee_id] ASC)
 ) ON [PRIMARY]
-GO
 
 --  CAR_MODELS
 CREATE TABLE [dbo].[car_models_zad](
@@ -301,7 +299,6 @@ CREATE TABLE [dbo].[car_models_zad](
 PRIMARY KEY CLUSTERED ([car_models_id] ASC),
 CONSTRAINT UQ_car_models_zad UNIQUE ([brand], [model], [engine], [fuel_type])
 ) ON [PRIMARY]
-GO
 
 -- CLIENT VEHICLES
 CREATE TABLE [dbo].[client_vehicles_zad](
@@ -316,7 +313,6 @@ PRIMARY KEY CLUSTERED ([vehicle_id] ASC),
 FOREIGN KEY ([client_id]) REFERENCES [dbo].[clients_zad]([client_id]),
 FOREIGN KEY ([car_models_id]) REFERENCES [dbo].[car_models_zad]([car_models_id])
 ) ON [PRIMARY]
-GO
 
 -- CLIENT_WORK_ORDERS
 CREATE TABLE [dbo].[client_work_orders_zad](
@@ -335,7 +331,6 @@ FOREIGN KEY ([client_id]) REFERENCES [dbo].[clients_zad]([client_id]),
 FOREIGN KEY ([vehicle_id]) REFERENCES [dbo].[client_vehicles_zad]([vehicle_id]),
 FOREIGN KEY ([employee_id]) REFERENCES [dbo].[employees_zad]([employee_id])
 ) ON [PRIMARY]
-GO
 
 -- SERVICES_DETAILS   
 CREATE TABLE [dbo].[services_details_zad](
@@ -346,7 +341,6 @@ CREATE TABLE [dbo].[services_details_zad](
     [estimated_time] [int] NULL,
 PRIMARY KEY CLUSTERED ([service_id] ASC)
 ) ON [PRIMARY]
-GO
 
 -- WORK_SERVICES
 CREATE TABLE [dbo].[work_services_zad](
@@ -362,7 +356,6 @@ FOREIGN KEY ([client_work_order_id])
 FOREIGN KEY ([service_id]) 
     REFERENCES [dbo].[services_details_zad]([service_id])
 ) ON [PRIMARY]
-GO
 
 -- CAR_PARTS
 CREATE TABLE [dbo].[car_parts_zad](
@@ -380,7 +373,6 @@ CREATE TABLE [dbo].[car_parts_zad](
 PRIMARY KEY CLUSTERED ([part_id] ASC),
 FOREIGN KEY ([supplier_id]) REFERENCES [dbo].[suppliers_zad]([supplier_id])
 ) ON [PRIMARY]
-GO
 
 -- USED_PARTS
 CREATE TABLE [dbo].[used_parts_zad](
@@ -395,7 +387,6 @@ FOREIGN KEY ([client_work_order_id])
 FOREIGN KEY ([part_id]) 
     REFERENCES [dbo].[car_parts_zad]([part_id])
 ) ON [PRIMARY]
-GO
 
 -- COMPANY_ORDERS
 CREATE TABLE [dbo].[company_orders_zad](
@@ -413,7 +404,6 @@ FOREIGN KEY ([supplier_id])
 FOREIGN KEY ([employee_id]) 
     REFERENCES [dbo].[employees_zad]([employee_id])
 ) ON [PRIMARY]
-GO
 
 -- COMPANY_ORDER_ITEMS
 CREATE TABLE [dbo].[company_order_items_zad](
@@ -428,7 +418,6 @@ FOREIGN KEY ([order_id])
 FOREIGN KEY ([part_id])
     REFERENCES [dbo].[car_parts_zad]([part_id])
 ) ON [PRIMARY]
-GO
 
 -- PAYMENTS
 CREATE TABLE [dbo].[payments_zad](
@@ -442,7 +431,6 @@ CREATE TABLE [dbo].[payments_zad](
 PRIMARY KEY CLUSTERED ([payment_id] ASC),
 FOREIGN KEY ([client_work_order_id]) REFERENCES [dbo].[client_work_orders_zad]([client_work_order_id])
 ) ON [PRIMARY]
-GO
 ```
 
 ## Widoki
@@ -473,7 +461,7 @@ JOIN car_models_zad cm
     ON cv.car_models_id = cm.car_models_id
 LEFT JOIN employees_zad e
     ON cwo.employee_id = e.employee_id;
-GO
+
  
  
 ---- Widok 2 - Stan magazynowy części ----
@@ -493,7 +481,7 @@ SELECT
 FROM car_parts_zad cp
 LEFT JOIN suppliers_zad s
     ON cp.supplier_id = s.supplier_id;
-GO
+
 
 ---- Widok 3 - Aktywne zlecenia ----
 
@@ -504,7 +492,7 @@ SELECT
     *
 FROM dbo.vw_work_order_summary_zad
 WHERE ISNULL(status, '') NOT IN ('Zakończone', 'Rozliczone', 'Anulowane');
-GO
+
 
 ---- Widok 4 - aktualne zamówienia części ----
 
@@ -523,7 +511,7 @@ LEFT JOIN dbo.company_order_items_zad coi ON co.order_id = coi.order_id
 WHERE ISNULL(co.status, '') NOT IN ('Dostarczone', 'Anulowane')
 GROUP BY
     co.order_id, co.order_date, co.expected_delivery_date, co.status, s.supplier_id, s.company_name, s.contact_person, s.phone, s.email, e.employee_id, e.first_name, e.last_name, co.total_amount, co.description;
-GO
+
 
 ## Procedury/funkcje
 
@@ -543,8 +531,7 @@ BEGIN
     WHERE client_id = @client_id;
     RETURN @result;
  
-END
-GO
+END;
  
 Przykład:
 SELECT dbo.fn_ClientWorkOrdersCount(1);
@@ -568,7 +555,6 @@ BEGIN
 
     RETURN ISNULL(@result, 0);
 END;
-GO
 
 ---- Procedura 1 - przyjęcie dostawy i zwiększenie magazynu ----
 
@@ -632,7 +618,7 @@ BEGIN
     FROM dbo.company_orders_zad
     WHERE order_id = @order_id;
 END;
-GO
+
 
 ## Triggery
 
@@ -653,8 +639,7 @@ BEGIN
     INNER JOIN inserted i
         ON cp.part_id = i.part_id;
  
-END
-GO
+END;
  
 ---- Trigger 2 - Kontrola stanu magazynowego ----
  
@@ -691,5 +676,4 @@ BEGIN
         description
     FROM inserted;
  
-END
-GO
+END;
