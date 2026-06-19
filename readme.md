@@ -519,7 +519,7 @@ GROUP BY
 
 ---- Funkcja 1 - Liczba zleceń klienta ----
 Funkcja zwraca liczbę zleceń przypisanych do danego klienta. Na podstawie identyfikatora klienta sprawdza, ile razy korzystał on z usług warsztatu. Może być używana do prostych statystyk, na przykład do sprawdzenia aktywności klienta lub historii jego wizyt.
-```
+```sql
 CREATE FUNCTION fn_ClientWorkOrdersCount
 (
     @client_id INT
@@ -562,7 +562,7 @@ END;
 ---- Procedura 1 - przyjęcie dostawy i zwiększenie magazynu ----
 
 Procedura służy do przyjęcia dostawy części od dostawcy. Po jej wykonaniu zwiększany jest stan magazynowy części na podstawie pozycji zamówienia, a samo zamówienie otrzymuje status Dostarczone. Procedura zapisuje także datę dostawy i przelicza wartość zamówienia.
-```
+```sql
 CREATE OR ALTER PROCEDURE dbo.sp_receive_company_order_zad
     @order_id INT,
     @delivery_date DATE = NULL
