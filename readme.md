@@ -439,7 +439,7 @@ FOREIGN KEY ([client_work_order_id]) REFERENCES [dbo].[client_work_orders_zad]([
 ---- Widok 1 - Historia zleceń klientów ----
  
 Widok pokazuje historię klienta, pojazd, mechanika i status zlecenia. Widok nadaje się do podstawowego raportu z napraw wykonanych lub realizowanych dla klientów.
-    
+```sql   
 CREATE VIEW vw_client_work_orders AS
 SELECT
     cwo.client_work_order_id,
@@ -462,12 +462,13 @@ JOIN car_models_zad cm
 LEFT JOIN employees_zad e
     ON cwo.employee_id = e.employee_id;
 
- 
+ ```
  
 ---- Widok 2 - Stan magazynowy części ----
 
 Widok przedstawia podstawowy stan magazynowy części. Jest to prostsza wersja widoku magazynowego, przydatna do szybkiego sprawdzenia dostępności części.
- 
+
+ ```sql
 CREATE VIEW vw_parts_stock AS
 SELECT
     cp.part_id,
@@ -481,23 +482,24 @@ SELECT
 FROM car_parts_zad cp
 LEFT JOIN suppliers_zad s
     ON cp.supplier_id = s.supplier_id;
-
+```
 
 ---- Widok 3 - Aktywne zlecenia ----
 
 Widok pokazuje tylko aktualnie aktywne zlecenia, czyli takie, które nie są zakończone, rozliczone ani anulowane. Dzięki temu można szybko sprawdzić, które samochody nadal znajdują się w obsłudze warsztatu. Widok przydaje się do bieżącej organizacji pracy.
 
+```sql
 CREATE OR ALTER VIEW dbo.vw_active_work_orders_zad AS
 SELECT
     *
 FROM dbo.vw_work_order_summary_zad
 WHERE ISNULL(status, '') NOT IN ('Zakończone', 'Rozliczone', 'Anulowane');
-
+```
 
 ---- Widok 4 - aktualne zamówienia części ----
 
 Widok przedstawia aktualne zamówienia części u dostawców. Widok pomaga śledzić, które zamówienia nie zostały jeszcze dostarczone.
-
+```sql
 CREATE OR ALTER VIEW dbo.vw_pending_company_orders_zad AS
 SELECT
     co.order_id, co.order_date, co.delivery_date, DATEDIFF(DAY, CAST(GETDATE() AS DATE), co.delivery_date) AS days_to_delivery, co.status, s.supplier_id, s.company_name AS supplier_name,
@@ -511,13 +513,13 @@ LEFT JOIN dbo.company_order_items_zad coi ON co.order_id = coi.order_id
 WHERE ISNULL(co.status, '') NOT IN ('Dostarczone', 'Anulowane')
 GROUP BY
     co.order_id, co.order_date, co.delivery_date, co.status, s.supplier_id, s.company_name, s.contact_person, s.phone, s.email, e.employee_id, e.first_name, e.last_name, co.total_amount, co.description;
-
+```
 
 ## Procedury/funkcje
 
 ---- Funkcja 1 - Liczba zleceń klienta ----
 Funkcja zwraca liczbę zleceń przypisanych do danego klienta. Na podstawie identyfikatora klienta sprawdza, ile razy korzystał on z usług warsztatu. Może być używana do prostych statystyk, na przykład do sprawdzenia aktywności klienta lub historii jego wizyt.
-
+```
 CREATE FUNCTION fn_ClientWorkOrdersCount
 (
     @client_id INT
@@ -532,14 +534,15 @@ BEGIN
     RETURN @result;
  
 END;
- 
+```
+
 Przykład:
 SELECT dbo.fn_ClientWorkOrdersCount(1);
 
 ---- Funkcja 2 - całkowity koszt zlecenia ----
 
 Funkcja oblicza całkowity koszt zlecenia naprawy. Sumuje koszt usług oraz koszt użytych części. Jest przydatna do automatycznego aktualizowania pola total_cost w zleceniu oraz do przygotowania rozliczenia dla klienta.
-
+```sql
 CREATE OR ALTER FUNCTION dbo.fn_work_order_total_cost_zad
 (
     @client_work_order_id INT
@@ -555,11 +558,11 @@ BEGIN
 
     RETURN ISNULL(@result, 0);
 END;
-
+```
 ---- Procedura 1 - przyjęcie dostawy i zwiększenie magazynu ----
 
 Procedura służy do przyjęcia dostawy części od dostawcy. Po jej wykonaniu zwiększany jest stan magazynowy części na podstawie pozycji zamówienia, a samo zamówienie otrzymuje status Dostarczone. Procedura zapisuje także datę dostawy i przelicza wartość zamówienia.
-
+```
 CREATE OR ALTER PROCEDURE dbo.sp_receive_company_order_zad
     @order_id INT,
     @delivery_date DATE = NULL
@@ -618,7 +621,7 @@ BEGIN
     FROM dbo.company_orders_zad
     WHERE order_id = @order_id;
 END;
-
+```
 
 ## Triggery
 
@@ -626,7 +629,7 @@ END;
 ---- Trigger 1 - Aktualizacja stanu magazynowego po użyciu części ----
  
 Trigger uruchamia się po dodaniu użytej części do tabeli used_parts_zad. Jego zadaniem jest automatyczne zmniejszenie stanu magazynowego danej części o ilość wykorzystaną w naprawie. Dzięki temu magazyn jest aktualizowany bez ręcznego poprawiania liczby części.
-
+```sql
 CREATE TRIGGER trg_UpdateStockAfterPartUsage
 ON used_parts_zad
 AFTER INSERT
@@ -640,11 +643,11 @@ BEGIN
         ON cp.part_id = i.part_id;
  
 END;
- 
+ ```
 ---- Trigger 2 - Kontrola stanu magazynowego ----
  
 Trigger sprawdza, czy przed dodaniem użytej części do zlecenia dostępna jest wystarczająca ilość tej części w magazynie. Jeżeli mechanik próbuje zużyć więcej części, niż znajduje się na stanie, operacja zostaje zablokowana i pojawia się komunikat o braku części. Trigger chroni bazę przed zejściem stanu magazynowego poniżej zera.
-
+```sql
 CREATE TRIGGER trg_CheckStock
 ON used_parts_zad
 INSTEAD OF INSERT
@@ -677,3 +680,4 @@ BEGIN
     FROM inserted;
  
 END;
+```
