@@ -54,7 +54,7 @@ System powinien umożliwiać:
 
 ## Schemat bazy danych
 
-<img width="1657" height="856" alt="obraz" src="https://github.com/user-attachments/assets/1d3043d8-1d9b-495e-b242-8ab20bb74c3a" />
+<img width="1619" height="1004" alt="image" src="https://github.com/user-attachments/assets/3856afa8-cb3a-4c9a-a63a-5800c61c3553" />
 
 ## Opis poszczególnych tabel
 
@@ -484,19 +484,7 @@ LEFT JOIN suppliers_zad s
     ON cp.supplier_id = s.supplier_id;
 ```
 
----- Widok 3 - Aktywne zlecenia ----
-
-Widok pokazuje tylko aktualnie aktywne zlecenia, czyli takie, które nie są zakończone, rozliczone ani anulowane. Dzięki temu można szybko sprawdzić, które samochody nadal znajdują się w obsłudze warsztatu. Widok przydaje się do bieżącej organizacji pracy.
-
-```sql
-CREATE OR ALTER VIEW dbo.vw_active_work_orders_zad AS
-SELECT
-    *
-FROM dbo.vw_work_order_summary_zad
-WHERE ISNULL(status, '') NOT IN ('Zakończone', 'Rozliczone', 'Anulowane');
-```
-
----- Widok 4 - aktualne zamówienia części ----
+---- Widok 3 - aktualne zamówienia części ----
 
 Widok przedstawia aktualne zamówienia części u dostawców. Widok pomaga śledzić, które zamówienia nie zostały jeszcze dostarczone.
 ```sql
