@@ -527,26 +527,6 @@ END;
 Przykład:
 SELECT dbo.fn_ClientWorkOrdersCount(1);
 
----- Funkcja 2 - całkowity koszt zlecenia ----
-
-Funkcja oblicza całkowity koszt zlecenia naprawy. Sumuje koszt usług oraz koszt użytych części. Jest przydatna do automatycznego aktualizowania pola total_cost w zleceniu oraz do przygotowania rozliczenia dla klienta.
-```sql
-CREATE OR ALTER FUNCTION dbo.fn_work_order_total_cost_zad
-(
-    @client_work_order_id INT
-)
-RETURNS DECIMAL(10,2)
-AS
-BEGIN
-    DECLARE @result DECIMAL(10,2);
-
-    SET @result =
-        ISNULL(dbo.fn_work_order_services_cost_zad(@client_work_order_id), 0)
-        + ISNULL(dbo.fn_work_order_parts_cost_zad(@client_work_order_id), 0);
-
-    RETURN ISNULL(@result, 0);
-END;
-```
 ---- Procedura 1 - przyjęcie dostawy i zwiększenie magazynu ----
 
 Procedura służy do przyjęcia dostawy części od dostawcy. Po jej wykonaniu zwiększany jest stan magazynowy części na podstawie pozycji zamówienia, a samo zamówienie otrzymuje status Dostarczone. Procedura zapisuje także datę dostawy i przelicza wartość zamówienia.
